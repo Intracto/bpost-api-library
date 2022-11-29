@@ -7,6 +7,7 @@ use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Option;
 use Bpost\BpostApiClient\Bpost\Order\Receiver;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Common\XmlHelper;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 use DomDocument;
@@ -167,12 +168,7 @@ class International implements IBox
      */
     public function toXML(DOMDocument $document, $prefix = null)
     {
-        $tagName = 'internationalBox';
-        if ($prefix !== null) {
-            $tagName = $prefix . ':' . $tagName;
-        }
-
-        $internationalBox = $document->createElement($tagName);
+        $internationalBox = $document->createElement(XmlHelper::getPrefixedTagName('internationalBox', $prefix));
         $international = $document->createElement('international:international');
         $internationalBox->appendChild($international);
 
