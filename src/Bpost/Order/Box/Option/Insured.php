@@ -2,6 +2,7 @@
 
 namespace Bpost\BpostApiClient\Bpost\Order\Box\Option;
 
+use Bpost\BpostApiClient\Bpost;
 use Bpost\BpostApiClient\Common\XmlHelper;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 use DomDocument;
@@ -166,7 +167,7 @@ class Insured extends Option
      */
     public static function createFromXML(SimpleXMLElement $xml)
     {
-        $insuranceDetail = $xml->children('common', true);
+        $insuranceDetail = $xml->children(Bpost::XMLNS_V5_COMMON);
 
         $type = $insuranceDetail->getName();
         $value = $insuranceDetail->attributes()->value !== null ? (int) $insuranceDetail->attributes()->value : null;

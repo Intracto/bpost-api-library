@@ -2,12 +2,15 @@
 
 namespace Bpost\BpostApiClient\Bpost;
 
+use Bpost\BpostApiClient\Bpost;
 use Bpost\BpostApiClient\Bpost\Order\Box;
 use Bpost\BpostApiClient\Bpost\Order\Line;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoReferenceFoundException;
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use SimpleXMLElement;
 
 /**
@@ -152,58 +155,43 @@ class Order
      * @param string      $accountId
      *
      * @return DOMElement
+     *
+     * @throws DOMException
      */
     public function toXML(DOMDocument $document, $accountId)
     {
-        $order = $document->createElement(
-            'tns:order'
-        );
-        $order->setAttribute(
-            'xmlns:common',
-            'http://schema.post.be/shm/deepintegration/v5/common'
-        );
-        $order->setAttribute(
-            'xmlns:tns',
-            'http://schema.post.be/shm/deepintegration/v5/'
-        );
-        $order->setAttribute(
-            'xmlns',
-            'http://schema.post.be/shm/deepintegration/v5/national'
-        );
-        $order->setAttribute(
-            'xmlns:international',
-            'http://schema.post.be/shm/deepintegration/v5/international'
-        );
-        $order->setAttribute(
-            'xmlns:xsi',
-            'http://www.w3.org/2001/XMLSchema-instance'
-        );
-        $order->setAttribute(
-            'xsi:schemaLocation',
-            'http://schema.post.be/shm/deepintegration/v5/'
-        );
+        $order = $document->createElementNS(Bpost::XMLNS_V5_ROOT, 'tns:order');
+        $order->setAttributeNS(Bpost::XMLNS, 'xmlns', Bpost::XMLNS_V5_NATIONAL);
+        //$order->setAttributeNS(Bpost::XMLNS', 'xmlns:tns', Bpost::XMLNS_V5_ROOT); // already declared during the root element creation
+        $order->setAttributeNS(Bpost::XMLNS, 'xmlns:common', Bpost::XMLNS_V5_COMMON);
+        $order->setAttributeNS(Bpost::XMLNS, 'xmlns:international', Bpost::XMLNS_V5_INTERNATIONAL);
+        $order->setAttributeNS(Bpost::XMLNS, 'xmlns:xsi', Bpost::XMLNS_XSI);
+        $order->setAttributeNS(Bpost::XMLNS_XSI, 'xsi:schemaLocation', Bpost::XMLNS_V5_ROOT);
 
         $document->appendChild($order);
 
         $order->appendChild(
-            $document->createElement(
-                'tns:accountId',
+            $document->createElementNS(
+                Bpost::XMLNS_V5_ROOT,
+                'accountId',
                 (string) $accountId
             )
         );
 
         if ($this->getReference() !== null) {
             $order->appendChild(
-                $document->createElement(
-                    'tns:reference',
+                $document->createElementNS(
+                    Bpost::XMLNS_V5_ROOT,
+                    'reference',
                     $this->getReference()
                 )
             );
         }
         if ($this->getCostCenter() !== null) {
             $order->appendChild(
-                $document->createElement(
-                    'tns:costCenter',
+                $document->createElementNS(
+                    Bpost::XMLNS_V5_ROOT,
+                    'costCenter',
                     $this->getCostCenter()
                 )
             );
@@ -222,7 +210,6 @@ class Order
         $boxes = $this->getBoxes();
         if (!empty($boxes)) {
             foreach ($boxes as $box) {
-                /** @var $box \Bpost\BpostApiClient\Bpost\Order\Box */
                 $order->appendChild(
                     $box->toXML($document, 'tns')
                 );
@@ -237,8 +224,9 @@ class Order
      *
      * @return Order
      *
-     * @throws BpostXmlNoReferenceFoundException
      * @throws BpostNotImplementedException
+     * @throws BpostXmlNoReferenceFoundException
+     * @throws BpostInvalidValueException
      */
     public static function createFromXML(SimpleXMLElement $xml)
     {

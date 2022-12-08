@@ -40,6 +40,18 @@ use SimpleXMLElement;
  */
 class Bpost
 {
+    const XMLNS = 'http://www.w3.org/2000/xmlns/';
+    const XMLNS_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
+    const XMLNS_V3_ROOT = 'http://schema.post.be/shm/deepintegration/v3/';
+    const XMLNS_V3_COMMON = 'http://schema.post.be/shm/deepintegration/v3/common';
+    const XMLNS_V3_NATIONAL = 'http://schema.post.be/shm/deepintegration/v3/national';
+    const XMLNS_V3_INTERNATIONAL = 'http://schema.post.be/shm/deepintegration/v3/international';
+
+    const XMLNS_V5_ROOT = 'http://schema.post.be/shm/deepintegration/v5/';
+    const XMLNS_V5_COMMON = 'http://schema.post.be/shm/deepintegration/v5/common';
+    const XMLNS_V5_NATIONAL = 'http://schema.post.be/shm/deepintegration/v5/national';
+    const XMLNS_V5_INTERNATIONAL = 'http://schema.post.be/shm/deepintegration/v5/international';
+
     const LABEL_FORMAT_A4 = 'A4';
     const LABEL_FORMAT_A6 = 'A6';
 
