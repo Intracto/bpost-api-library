@@ -142,6 +142,7 @@ class International implements IBox
             Product::PRODUCT_NAME_BPACK_WORLD_EXPRESS_PRO,
             Product::PRODUCT_NAME_BPACK_EUROPE_BUSINESS,
             Product::PRODUCT_NAME_BPACK_AT_BPOST_INTERNATIONAL,
+            Product::PRODUCT_NAME_BPACK_24_7_INTERNATIONAL,
         );
     }
 
@@ -304,7 +305,7 @@ class International implements IBox
                         $option = Messaging::createFromXML($optionData);
                         break;
                     default:
-                        if($option->getName() === Messaging::MESSAGING_TYPE_KEEP_ME_INFORMED) {
+                        if($optionData->getName() === Messaging::MESSAGING_TYPE_KEEP_ME_INFORMED) {
                             $className = Messaging::class;
                         } else {
                             $className = '\Bpost\BpostApiClient\Bpost\Order\Box\Option\\' . ucfirst($optionData->getName());
