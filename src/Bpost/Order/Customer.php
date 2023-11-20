@@ -63,6 +63,11 @@ class Customer
      */
     public function setCompany($company)
     {
+        $length = 40;
+        if (mb_strlen($company) > $length) {
+            throw new BpostInvalidLengthException('company', mb_strlen($company), $length);
+        }
+        
         $this->company = $company;
     }
 
@@ -101,6 +106,11 @@ class Customer
      */
     public function setName($name)
     {
+        $length = 20;
+        if (mb_strlen($name) > $length) {
+            throw new BpostInvalidLengthException('name', mb_strlen($name), $length);
+        }
+
         $this->name = $name;
     }
 
