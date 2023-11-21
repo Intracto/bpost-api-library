@@ -62,7 +62,7 @@ class AtIntlPugo extends International
     public static function getPossibleProductValues()
     {
         return array(
-            Product::PRODUCT_NAME_BPACK_AT_BPOST,
+            Product::PRODUCT_NAME_BPACK_AT_BPOST_INTERNATIONAL,
         );
     }
 
@@ -250,7 +250,6 @@ class AtIntlPugo extends International
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
-        dump(__METHOD__);
         $atBpost = new AtBpost();
 
         if (isset($xml->atBpost->product) && $xml->atBpost->product != '') {
